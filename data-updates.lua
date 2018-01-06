@@ -66,32 +66,8 @@ local function generate_pallet_item_icons(item)
     },
     {
       icon = item.icon,
-      scale = 0.5,
-      tint = {r=1, g=1, b=1, a=0.5},
-      shift = {-7, -7}
-    },
-    {
-      icon = item.icon,
-      scale = 0.5,
-      tint = {r=1, g=1, b=1, a=0.5},
-      shift = {7, -7}
-    },
-    {
-      icon = item.icon,
-      scale = 0.5,
-      tint = {r=1, g=1, b=1, a=0.5},
-      shift = {-7, 6}
-    },
-    {
-      icon = item.icon,
-      scale = 0.5,
-      tint = {r=1, g=1, b=1, a=0.5},
-      shift = {7, 6}
-    },
-    {
-      icon = item.icon,
       scale = 0.75,
-      shift = {0, -2}
+      shift = {0, -1}
     }
   }
 end
