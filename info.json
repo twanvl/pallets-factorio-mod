@@ -1,0 +1,13 @@
+{
+  "name": "pallets",
+  "version": "0.1.0",
+  "factorio_version": "0.16",
+  "title": "Pallets",
+  "author": "twanvl",
+  "contact": "Twan van Laarhove <mail@twanvl.nl>",
+  "homepage": "",
+  "description": "Adds recipies for stacking items onto pallets",
+  "dependencies": [
+    "base >= 0.16.00"
+  ]
+}
