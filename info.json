@@ -5,7 +5,7 @@
   "title": "Pallets",
   "author": "twanvl",
   "contact": "Twan van Laarhove <mail@twanvl.nl>",
-  "homepage": "",
+  "homepage": "https://github.com/twanvl/pallets-factorio-mod",
   "description": "Adds recipies for stacking items onto pallets",
   "dependencies": [
     "base >= 0.16.00"
