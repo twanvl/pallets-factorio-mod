@@ -1,0 +1,6 @@
+0.1.1:
+  * Make "Limit pallets to a single stack" configurable
+  * Change default to 50 items per pallet
+
+0.1.0:
+  * Initial release

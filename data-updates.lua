@@ -11,12 +11,14 @@ local empty_pallet_item
 
 -- Number of items that fit on a pallet
 local items_per_pallet = settings.startup["pallet-stack-size"].value
-local limit_items_per_pallet_to_stack_size = false
+local limit_items_per_pallet_to_stack_size = settings.startup["pallet-limit-to-stack"].value
 -- Allow barrels on pallets?
 local allow_barrels_on_pallets = false
 -- Allow empty/loaded pallets onto pallets?
 local allow_empty_pallets_on_pallets = true
 local allow_pallets_on_pallets = false
+local allow_entities_on_pallets = true
+local allow_equipment_on_pallets = false
 -- Should the stack size of pallets be >1?
 local allow_pallet_stacks = false
 
@@ -280,6 +282,12 @@ local function allow_on_pallet(item)
       return allow_empty_pallets_on_pallets
     elseif item.subgroup == "load-pallet" then
       return allow_pallets_on_pallets
+    elseif item.place_result then
+      return allow_entities_on_pallets
+    elseif item.placed_as_equipment_result then
+      return allow_equipment_on_pallets
+    elseif limit_items_per_pallet_to_stack_size and item.stack_size <= 1 then
+      return false -- no point in stacking a single item
     else
       return true
     end
