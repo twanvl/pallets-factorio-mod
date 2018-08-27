@@ -217,6 +217,7 @@ local function create_load_pallet_recipe(item)
     hide_from_stats = hide_palleting_from_production_stats,
     allow_decomposition = allow_palleting_decomposition
   }
+
   data:extend({recipe})
   return recipe
 end
