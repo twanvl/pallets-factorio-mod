@@ -217,14 +217,6 @@ local function create_load_pallet_recipe(item)
     hide_from_stats = hide_palleting_from_production_stats,
     allow_decomposition = allow_palleting_decomposition
   }
-  
-  -- special case for pallet stack
-  if item.name == empty_pallet_item.name then
-    recipe.ingredients = {
-      {type = "item", name = item.name, amount = get_items_per_pallet(item) + 1}
-    }
-  end
-
   data:extend({recipe})
   return recipe
 end
@@ -254,13 +246,6 @@ local function create_unload_pallet_recipe(item)
     hide_from_stats = hide_palleting_from_production_stats,
     allow_decomposition = allow_palleting_decomposition
   }
-
-  -- special case for pallet stack
-  if item.name == empty_pallet_item.name then
-    recipe.results = {
-      {type = "item", name = item.name, amount = get_items_per_pallet(item) + 1}
-    }
-  end
 
   data:extend({recipe})
   return recipe
