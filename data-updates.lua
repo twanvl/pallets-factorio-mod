@@ -58,48 +58,82 @@ local function contains(table,element)
   return false
 end
 
+local function scale_and_shift_icons(new_icons, icons, scale, shift)
+  -- TODO: shifts are broken: they don't scale with the icon
+  for i, icon in pairs(icons) do
+    local new_icon = table.deepcopy(icon)
+    
+    new_icon.scale = scale * (icon.scale or 1)
+    
+    if icon.shift then
+      new_icon.shift = {
+        icon.shift[1] * scale + shift[1],
+        icon.shift[2] * scale + shift[2]
+      }
+    else
+      new_icon.shift = shift
+    end
+    
+    new_icons[i + 1] = new_icon
+  end
+end
+
 -- Generates the icons definition for a loaded pallet item
 local function generate_pallet_item_icons(item)
-  -- TODO: shifts are broken: they don't scale with the icon
-  return
-  {
-    {
-      icon = pallet_base_mask
-    },
-    {
-      icon = item.icon,
-      scale = 0.75,
-      shift = {0, -1}
-    }
+  local new_icons = {
+      {
+        icon = pallet_base_mask
+      }
   }
+  scale_and_shift_icons(
+    new_icons,
+    item.icons or {
+      {
+        icon = item.icon
+      }
+    },
+    0.75,
+    {0, -1} 
+  )
+  return new_icons
 end
 
 local function generate_load_pallet_icons(item)
-  return
-  {
-    {
-      icon = pallet_load_base_mask
-    },
-    {
-      icon = item.icon,
-      scale = 0.5,
-      shift = {-8, -8}
-    }
+  local new_icons = {
+      {
+        icon = pallet_load_base_mask
+      }
   }
+  scale_and_shift_icons(
+    new_icons,
+    item.icons or {
+      {
+        icon = item.icon
+      }
+    },
+    0.5,
+    {-8, -8} 
+  )
+  return new_icons
 end
 
 local function generate_unload_pallet_icons(item)
-  return
-  {
-    {
-      icon = pallet_unload_base_mask
-    },
-    {
-      icon = item.icon,
-      scale = 0.5,
-      shift = {8, 8}
-    }
+  local new_icons = {
+      {
+        icon = pallet_unload_base_mask
+      }
   }
+  scale_and_shift_icons(
+    new_icons,
+    item.icons or {
+      {
+        icon = item.icon
+      }
+    },
+    0.5,
+    {8, 8} 
+  )
+  return new_icons
 end
 
 
@@ -183,6 +217,13 @@ local function create_load_pallet_recipe(item)
     hide_from_stats = hide_palleting_from_production_stats,
     allow_decomposition = allow_palleting_decomposition
   }
+  
+  -- special case for pallet stack
+  if item.name == empty_pallet_item.name then
+    recipe.ingredients = {
+      {type = "item", name = item.name, amount = get_items_per_pallet(item) + 1}
+    }
+  end
 
   data:extend({recipe})
   return recipe
@@ -213,6 +254,13 @@ local function create_unload_pallet_recipe(item)
     hide_from_stats = hide_palleting_from_production_stats,
     allow_decomposition = allow_palleting_decomposition
   }
+
+  -- special case for pallet stack
+  if item.name == empty_pallet_item.name then
+    recipe.results = {
+      {type = "item", name = item.name, amount = get_items_per_pallet(item) + 1}
+    }
+  end
 
   data:extend({recipe})
   return recipe
@@ -275,7 +323,7 @@ end
 local function allow_on_pallet(item)
   if contains(item.flags,"hidden") then
     return false
-  elseif (item.auto_pallet == nil or item.auto_pallet) and item.icon then
+  elseif (item.auto_pallet == nil or item.auto_pallet) and (item.icon or item.icons) then
     if item.subgroup == "fill-barrel" or item.name == "empty-barrel" then
       return allow_barrels_on_pallets
     elseif item.name == "empty-pallet" then
